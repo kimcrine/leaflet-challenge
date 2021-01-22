@@ -125,34 +125,41 @@ function createFeatures(earthquakeData) {
     }).addTo(faultLine)
   })
 
-  // Color function to be used when creating the legend
-  function getColor(d) {
-    return d > 5 ? '#ff3333' :
-           d > 4  ? '#ff6633' :
-           d > 3  ? '#ff9933' :
-           d > 2  ? '#ffcc33' :
-           d > 1  ? '#ffff33' :
-                    '#ccff33';
-  }
+// Create legend
+var legend = L.control({
+    position: "bottomleft"
+});
 
-// Add legend to the map
-var legend = L.control({position: 'bottomright'});
-  
-legend.onAdd = function (map) {
+legend.onAdd = function(myMap) {
+    var div = L.DomUtil.create("div", "info legend"),
+    grades = [0, 1, 2, 3, 4, 5],
+    labels = [];
 
-    var div = L.DomUtil.create('div', 'info legend'),
-        mags = [0, 1, 2, 3, 4, 5],
-        labels = [];
-
-        
-    for (var i = 0; i < mags.length; i++) {
-        div.innerHTML +=
-            '<i style="background:' + getColor(mags[i] + 1) + '"></i> ' +
-            mags[i] + (mags[i + 1] ? '&ndash;' + mags[i + 1] + '<br>' : '+');
-    }
-
-    return div;
+// Create legend
+for (var i = 0; i < grades.length; i++) {
+    div.innerHTML +=
+        '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+}
+return div;
 };
-
 legend.addTo(myMap);
 }
+
+// Create color function
+function getColor(magnitude) {
+if (magnitude > 5) {
+    return 'red'
+} else if (magnitude > 4) {
+    return 'orange'
+} else if (magnitude > 3) {
+    return 'yellow'
+} else if (magnitude > 2) {
+    return 'lightgreen'
+} else if (magnitude > 1) {
+    return 'green'
+} else {
+    return 'magenta'
+}
+};
+
